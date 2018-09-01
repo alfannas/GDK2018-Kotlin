@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Latihan RecyclerView</string>
+    <string name="app_name">Project 2</string>
 
     <string-array name="club_name">
         <item>Barcelona FC</item>
