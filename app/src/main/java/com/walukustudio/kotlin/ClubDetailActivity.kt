@@ -38,13 +38,11 @@ class ClubDetailActivity : AppCompatActivity() {
 
         val intent = intent
 
-        val image: Int = intent.getIntExtra("image",0)
-        val name: String = intent.getStringExtra("name")
-        val desc: String = intent.getStringExtra("desc")
+        val item: Item = intent.getParcelableExtra("item")
 
-        Glide.with(this).load(image).into(ivClubImage)
-        tvClubName.text = name
-        tvClubDesc.text = desc
+        Glide.with(this).load(item.image).into(ivClubImage)
+        tvClubName.text = item.name
+        tvClubDesc.text = item.description
 
     }
 }

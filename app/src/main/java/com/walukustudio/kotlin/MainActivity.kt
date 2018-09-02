@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         initData()
 
         club_list.layoutManager = LinearLayoutManager(this)
-        club_list.adapter = RecyclerViewAdapter(this,items){
+        club_list.adapter = RecyclerViewAdapter(items){
             item: Item ->  itemClick(item)
         }
     }
@@ -33,9 +33,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun itemClick(item:Item){
-        startActivity<ClubDetailActivity>(
-                "name" to item.name,
-                "desc" to item.description,
-                "image" to item.image)
+        startActivity<ClubDetailActivity>("item" to item)
     }
 }
