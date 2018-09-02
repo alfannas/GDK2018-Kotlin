@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
     private var items: MutableList<Item> = mutableListOf()
@@ -16,7 +15,9 @@ class MainActivity : AppCompatActivity() {
         initData()
 
         club_list.layoutManager = LinearLayoutManager(this)
-        club_list.adapter = RecyclerViewAdapter(this,items, {item: Item ->  itemClick(item)})
+        club_list.adapter = RecyclerViewAdapter(this,items){
+            item: Item ->  itemClick(item)
+        }
     }
 
     private fun initData(){
