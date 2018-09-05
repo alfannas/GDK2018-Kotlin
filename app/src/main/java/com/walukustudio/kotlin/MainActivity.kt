@@ -1,38 +1,118 @@
 package com.walukustudio.kotlin
 
+import android.R
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.startActivity
+import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.widget.*
+import com.google.gson.Gson
+import com.walukustudio.kotlin.R.array.league
+import com.walukustudio.kotlin.R.color.colorAccent
+import com.walukustudio.kotlin.adapter.MainAdapter
+import com.walukustudio.kotlin.model.Team
+import com.walukustudio.kotlin.network.ApiRepository
+import com.walukustudio.kotlin.presenter.MainPresenter
+import com.walukustudio.kotlin.view.MainView
+import com.walukustudio.kotlin.utils.visible
+import com.walukustudio.kotlin.utils.invisible
+import org.jetbrains.anko.*
+import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.support.v4.onRefresh
+import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-class MainActivity : AppCompatActivity() {
-    private var items: MutableList<Item> = mutableListOf()
+class MainActivity : AppCompatActivity(),MainView {
+
+
+    private lateinit var listTeam: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var spinner: Spinner
+
+    private var teams: MutableList<Team> = mutableListOf()
+    private lateinit var presenter: MainPresenter
+    private lateinit var adapter: MainAdapter
+
+    private lateinit var leagueName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        initData()
 
-        club_list.layoutManager = LinearLayoutManager(this)
-        club_list.adapter = RecyclerViewAdapter(items){
-            item: Item ->  itemClick(item)
+        linearLayout{
+            lparams(width = matchParent, height = wrapContent)
+            orientation = LinearLayout.VERTICAL
+            topPadding = dip(16)
+            leftPadding = dip(16)
+            rightPadding = dip(16)
+
+            spinner = spinner()
+
+            swipeRefresh = swipeRefreshLayout {
+                setColorSchemeResources(colorAccent,
+                        R.color.holo_green_light,
+                        R.color.holo_orange_light,
+                        R.color.holo_red_light)
+
+                relativeLayout {
+                    lparams(width = matchParent, height = wrapContent)
+
+                    listTeam = recyclerView {
+                        lparams(width = matchParent,height = wrapContent)
+                        layoutManager = LinearLayoutManager(ctx)
+                    }
+
+                    progressBar = progressBar {
+
+                    }.lparams{
+                        centerHorizontally()
+                    }
+                }
+            }
+
+
+        }
+
+        adapter = MainAdapter(teams)
+        listTeam.adapter = adapter
+
+        val request = ApiRepository()
+        val gson = Gson()
+        presenter = MainPresenter(this,request,gson)
+
+        val spinnerItems = resources.getStringArray(league)
+        val spinnerAdapter = ArrayAdapter(ctx, R.layout.simple_spinner_dropdown_item, spinnerItems)
+        spinner.adapter = spinnerAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                leagueName = spinner.selectedItem.toString()
+                presenter.getTeamList(leagueName)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        swipeRefresh.onRefresh {
+            presenter.getTeamList(leagueName)
         }
     }
 
-    private fun initData(){
-        val name = resources.getStringArray(R.array.club_name)
-        val image = resources.obtainTypedArray(R.array.club_image)
-        val desc = resources.getStringArray(R.array.club_desc)
-        items.clear()
-        for(i in name.indices){
-            items.add(Item(name[i], image.getResourceId(i,0),desc[i]))
-        }
-
-        image.recycle()
+    override fun showLoading() {
+        progressBar.visible()
     }
 
-    private fun itemClick(item:Item){
-        startActivity<ClubDetailActivity>("item" to item)
+    override fun hideLoading() {
+        progressBar.invisible()
     }
+
+    override fun showTeamList(data: List<Team>) {
+        swipeRefresh.isRefreshing = false
+        teams.clear()
+        teams.addAll(data)
+        adapter.notifyDataSetChanged()
+    }
+
+
 }

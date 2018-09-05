@@ -33,4 +33,13 @@
         <item>Associazione Calcio Milan, commonly referred to as A.C. Milan or simply Milan, is a professional football club in Milan, Italy, founded in 1899.</item>
         <item>Arsenal Football Club is a professional football club based in Islington, London, England, that plays in the Premier League, the top flight of English football.</item>
     </string-array>
+
+    <array name="league">
+        <item>English Premier League</item>
+        <item>English League Championship</item>
+        <item>German Bundesliga</item>
+        <item>Italian Serie A</item>
+        <item>French Ligue 1</item>
+        <item>Spanish La Liga</item>
+    </array>
 </resources>
