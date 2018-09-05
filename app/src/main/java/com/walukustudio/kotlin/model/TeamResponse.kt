@@ -1,5 +1,5 @@
 package com.walukustudio.kotlin.model
 
-class TeamResponse (
+data class TeamResponse (
         val teams: List<Team>
 )
