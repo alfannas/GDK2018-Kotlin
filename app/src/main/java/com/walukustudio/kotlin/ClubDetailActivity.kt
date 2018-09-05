@@ -10,9 +10,9 @@ import org.jetbrains.anko.*
 
 class ClubDetailActivity : AppCompatActivity() {
 
-    lateinit var ivClubImage: ImageView
-    lateinit var tvClubName: TextView
-    lateinit var tvClubDesc: TextView
+    private lateinit var ivClubImage: ImageView
+    private lateinit var tvClubName: TextView
+    private lateinit var tvClubDesc: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
