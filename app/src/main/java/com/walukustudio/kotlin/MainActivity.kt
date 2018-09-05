@@ -25,7 +25,6 @@ import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 class MainActivity : AppCompatActivity(),MainView {
 
-
     private lateinit var listTeam: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
