@@ -1,8 +1,9 @@
 package com.walukustudio.kotlin
 
-import android.R
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -22,9 +23,10 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(),MainView {
-    
+
     private lateinit var listTeam: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
@@ -38,64 +40,31 @@ class MainActivity : AppCompatActivity(),MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        linearLayout{
-            lparams(width = matchParent, height = wrapContent)
-            orientation = LinearLayout.VERTICAL
-            topPadding = dip(16)
-            leftPadding = dip(16)
-            rightPadding = dip(16)
+        //val bottomNavigation: BottomNavigationView = findViewById(R.id.navigationView);
+        navigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
 
-            spinner = spinner()
-
-            swipeRefresh = swipeRefreshLayout {
-                setColorSchemeResources(colorAccent,
-                        R.color.holo_green_light,
-                        R.color.holo_orange_light,
-                        R.color.holo_red_light)
-
-                relativeLayout {
-                    lparams(width = matchParent, height = wrapContent)
-
-                    listTeam = recyclerView {
-                        lparams(width = matchParent,height = wrapContent)
-                        layoutManager = LinearLayoutManager(ctx)
-                    }
-
-                    progressBar = progressBar {
-
-                    }.lparams{
-                        centerHorizontally()
-                    }
-                }
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId){
+            R.id.nav_prev -> {
+                val prevFragment = FragmentPrev.newInstance()
+                openFragment(prevFragment)
             }
-
-
-        }
-
-        adapter = MainAdapter(teams)
-        listTeam.adapter = adapter
-
-        val request = ApiRepository()
-        val gson = Gson()
-        presenter = MainPresenter(this,request,gson)
-
-        val spinnerItems = resources.getStringArray(league)
-        val spinnerAdapter = ArrayAdapter(ctx, R.layout.simple_spinner_dropdown_item, spinnerItems)
-        spinner.adapter = spinnerAdapter
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                leagueName = spinner.selectedItem.toString()
-                presenter.getTeamList(leagueName)
+            R.id.nav_next -> {
+                val nextFragment = FragmentNext.newInstance()
+                openFragment(nextFragment)
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
+        false
+    }
 
-        swipeRefresh.onRefresh {
-            presenter.getTeamList(leagueName)
-        }
+    private fun openFragment(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     override fun showLoading() {
