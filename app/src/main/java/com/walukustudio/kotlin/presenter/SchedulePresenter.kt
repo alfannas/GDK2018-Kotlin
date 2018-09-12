@@ -1,6 +1,5 @@
 package com.walukustudio.kotlin.presenter
 
-import android.util.Log
 import com.google.gson.Gson
 import com.walukustudio.kotlin.BuildConfig
 import com.walukustudio.kotlin.model.ScheduleResponse

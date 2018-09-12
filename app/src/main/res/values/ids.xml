@@ -4,7 +4,7 @@
     <item name="team_name" type="id" />
 
     <item name="spinner" type="id"/>
-    <item name="swiweRefresh" type="id"/>
+    <item name="swipeRefresh" type="id"/>
     <item name="listTeam" type="id"/>
     <item name="progressBar" type="id"/>
 

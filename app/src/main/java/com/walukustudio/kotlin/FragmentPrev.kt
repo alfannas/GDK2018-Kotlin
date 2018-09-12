@@ -3,16 +3,12 @@ package com.walukustudio.kotlin
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.google.gson.Gson
-import com.walukustudio.kotlin.R.array.league
-import com.walukustudio.kotlin.R.color.colorAccent
-import com.walukustudio.kotlin.adapter.MainAdapter
 import com.walukustudio.kotlin.adapter.ScheduleAdapter
 import com.walukustudio.kotlin.model.Schedule
 import com.walukustudio.kotlin.network.ApiRepository
@@ -22,15 +18,11 @@ import com.walukustudio.kotlin.utils.invisible
 import com.walukustudio.kotlin.utils.visible
 import com.walukustudio.kotlin.view.ScheduleView
 
-import kotlinx.android.synthetic.main.fragment_prev.*
-import kotlinx.android.synthetic.main.fragment_prev.view.*
 import org.jetbrains.anko.*
-import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.*
 
 
 class FragmentPrev : Fragment(), ScheduleView {
-
 
     private lateinit var listTeam: RecyclerView
     private lateinit var progressBar: ProgressBar
@@ -40,7 +32,6 @@ class FragmentPrev : Fragment(), ScheduleView {
     private lateinit var presenter: SchedulePresenter
     private lateinit var adapter: ScheduleAdapter
 
-    private lateinit var leagueId: String
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = ScheduleUI<Fragment>().createView(AnkoContext.create(ctx,this))
@@ -68,8 +59,7 @@ class FragmentPrev : Fragment(), ScheduleView {
     }
 
     private fun itemClick(schedule:Schedule){
-        startActivity<MatchActivity>("schedule" to schedule)
-        Toast.makeText(context,schedule.idEvent,Toast.LENGTH_SHORT).show()
+        startActivity<MatchActivity>("schedule" to schedule,"type" to BuildConfig.PAST)
     }
 
 

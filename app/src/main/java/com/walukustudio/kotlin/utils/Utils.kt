@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 fun View.visible() {
@@ -13,6 +15,10 @@ fun View.visible() {
 
 fun View.invisible() {
     visibility = View.INVISIBLE
+}
+
+fun View.gone(){
+    visibility = View.GONE
 }
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
@@ -24,6 +30,17 @@ fun AppCompatActivity.addFragment(fragment: Fragment, frameId: Int){
 }
 fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
     supportFragmentManager.inTransaction{replace(frameId, fragment)}
+}
+
+fun dateConvert(date:String):String{
+    val locale = Locale("id")
+
+    val input = SimpleDateFormat("dd/MM/yy")
+    val output = SimpleDateFormat("E, dd MMM yyyy",locale)
+
+    val indate: Date = input.parse(date)
+
+    return output.format(indate)
 }
 
 

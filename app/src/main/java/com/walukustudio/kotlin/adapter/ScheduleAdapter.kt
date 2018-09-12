@@ -9,9 +9,8 @@ import android.widget.TextView
 import com.walukustudio.kotlin.BuildConfig
 import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.model.Schedule
+import com.walukustudio.kotlin.utils.dateConvert
 import kotlinx.android.synthetic.main.item_schedule.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ScheduleAdapter (private val context: Context, private val schedules: List<Schedule>, private val type: String, private val clicklistener: (Schedule) -> Unit)
     : RecyclerView.Adapter<ScheduleViewHolder>() {
@@ -52,16 +51,5 @@ class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         tvRight.text = schedule.awayTeam
 
         itemView.setOnClickListener { clicklistener(schedule) }
-    }
-
-    private fun dateConvert(date:String):String{
-        val locale = Locale("id")
-
-        val input = SimpleDateFormat("dd/MM/yy")
-        val output = SimpleDateFormat("E, dd MMM yyyy",locale)
-
-        val indate:Date = input.parse(date)
-
-        return output.format(indate)
     }
 }

@@ -4,7 +4,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.LinearLayout
 import com.walukustudio.kotlin.R
-import com.walukustudio.kotlin.R.id.swipeRefresh
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.linearLayout
