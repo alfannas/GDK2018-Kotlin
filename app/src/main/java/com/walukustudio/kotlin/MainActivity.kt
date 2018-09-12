@@ -5,25 +5,18 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.*
-import com.google.gson.Gson
-import com.walukustudio.kotlin.R.array.league
-import com.walukustudio.kotlin.R.color.colorAccent
 import com.walukustudio.kotlin.adapter.MainAdapter
 import com.walukustudio.kotlin.model.Team
-import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.presenter.MainPresenter
 import com.walukustudio.kotlin.view.MainView
 import com.walukustudio.kotlin.utils.visible
 import com.walukustudio.kotlin.utils.invisible
-import org.jetbrains.anko.*
-import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.support.v4.onRefresh
-import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import android.os.StrictMode
+
+
 
 class MainActivity : AppCompatActivity(),MainView {
 
@@ -41,6 +34,13 @@ class MainActivity : AppCompatActivity(),MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // entah kenapa butuh ini, fix error null saat request api schedule
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+
+        // initiate fragment
+        openFragment(FragmentPrev.newInstance())
 
         //val bottomNavigation: BottomNavigationView = findViewById(R.id.navigationView);
         navigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity(),MainView {
     private fun openFragment(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
-        transaction.addToBackStack(null)
         transaction.commit()
     }
 

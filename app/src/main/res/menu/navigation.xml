@@ -3,11 +3,11 @@
     <item
         android:id="@+id/nav_prev"
         android:icon="@drawable/baseline_receipt_white_18dp"
-        android:title="Previous"/>
+        android:title="@string/past"/>
 
     <item
         android:id="@+id/nav_next"
         android:icon="@drawable/baseline_event_white_18dp"
-        android:title="Next"/>
+        android:title="@string/next"/>
 
 </menu>

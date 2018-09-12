@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">Footbal Club</string>
+    <string name="app_name">Football Match Schedule</string>
+
+    <string name="past">Prev Match</string>
+    <string name="next">Next Match</string>
 
     <string-array name="club_name">
         <item>Barcelona FC</item>
