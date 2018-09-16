@@ -21,7 +21,7 @@ class MainPresenter(
 
             uiThread {
                 view.hideLoading()
-                view.showTeamList(data.teams)
+                view.showTeamList(data.teamsFootbal)
             }
         }
     }
