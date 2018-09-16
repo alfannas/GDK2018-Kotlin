@@ -73,7 +73,9 @@ class FragmentTeams : Fragment(), MainView{
             }
         }
 
-        adapter = MainAdapter(teams)
+        adapter = MainAdapter(teams){
+            ctx.startActivity<TeamDetailActivity>("id" to "${it.teamId}")
+        }
         listTeam.adapter = adapter
 
         val request = ApiRepository()

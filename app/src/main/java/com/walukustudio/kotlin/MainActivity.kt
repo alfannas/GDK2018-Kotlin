@@ -13,15 +13,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        addFragment(FragmentTeams.newInstance(),R.id.container)
-
         navigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigationView.selectedItemId = R.id.nav_teams
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId){
-            R.id.nav_prev -> {
+            R.id.nav_teams -> {
                 replaceFragment(FragmentTeams.newInstance(),R.id.container)
+            }
+            R.id.nav_fav ->{
+
             }
         }
         false
