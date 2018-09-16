@@ -3,7 +3,6 @@ package com.walukustudio.kotlin
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import com.walukustudio.kotlin.utils.addFragment
 import com.walukustudio.kotlin.utils.replaceFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -23,10 +22,10 @@ class MainActivity : AppCompatActivity() {
                 replaceFragment(FragmentTeams.newInstance(),R.id.container)
             }
             R.id.nav_fav ->{
-
+                replaceFragment(FragmentFav.newInstance(),R.id.container)
             }
         }
-        false
+        true
     }
 
 
