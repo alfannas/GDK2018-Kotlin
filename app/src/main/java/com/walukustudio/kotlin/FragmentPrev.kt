@@ -59,7 +59,9 @@ class FragmentPrev : Fragment(), ScheduleView {
     }
 
     private fun itemClick(schedule:Schedule){
-        startActivity<MatchActivity>("schedule" to schedule,"type" to BuildConfig.PAST)
+        startActivity<MatchActivity>(
+                "id" to schedule.idEvent,
+                "type" to BuildConfig.PAST)
     }
 
 

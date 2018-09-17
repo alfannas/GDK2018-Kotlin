@@ -59,7 +59,9 @@ class FragmentNext: Fragment(), ScheduleView {
     }
 
     private fun itemClick(schedule:Schedule){
-        startActivity<MatchActivity>("schedule" to schedule,"type" to BuildConfig.NEXT)
+        startActivity<MatchActivity>(
+                "id" to schedule.idEvent,
+                "type" to BuildConfig.NEXT)
     }
 
     override fun showLoading() {

@@ -2,12 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_prev"
-        android:icon="@drawable/baseline_receipt_white_18dp"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_receipt_24px"
         android:title="@string/past"/>
 
     <item
         android:id="@+id/nav_next"
-        android:icon="@drawable/baseline_event_white_18dp"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_event_24px"
         android:title="@string/next"/>
+
+    <item
+        android:id="@+id/nav_fav"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_stars_24px"
+        android:title="@string/fav"/>
 
 </menu>

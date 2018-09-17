@@ -3,6 +3,7 @@
 
     <string name="past">Prev Match</string>
     <string name="next">Next Match</string>
+    <string name="fav">Favorites</string>
 
     <string name="badge">Badge Logo</string>
     <string name="score">vs</string>

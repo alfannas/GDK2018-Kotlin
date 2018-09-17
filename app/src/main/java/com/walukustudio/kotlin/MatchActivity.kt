@@ -1,76 +1,56 @@
 package com.walukustudio.kotlin
 
+import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
-import com.walukustudio.kotlin.model.Schedule
-import com.walukustudio.kotlin.model.Team
-import com.walukustudio.kotlin.model.TeamResponse
+import com.walukustudio.kotlin.model.*
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
-import com.walukustudio.kotlin.utils.dateConvert
-import com.walukustudio.kotlin.utils.gone
+import com.walukustudio.kotlin.presenter.MatchPresenter
+import com.walukustudio.kotlin.utils.*
+import com.walukustudio.kotlin.view.MatchDetailView
 import kotlinx.android.synthetic.main.activity_match.*
+import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.delete
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.select
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
-class MatchActivity : AppCompatActivity() {
+class MatchActivity : AppCompatActivity(),MatchDetailView {
     private val request = ApiRepository()
     private val gson = Gson()
+
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var presenter: MatchPresenter
+    private lateinit var match: Schedule
+    private lateinit var id: String
+    private lateinit var type: String
+
+    private var menuItem: Menu? = null
+    private var isFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match)
 
         val intent = intent
-        val schedule: Schedule = intent.getParcelableExtra("schedule")
-        val type: String = intent.getStringExtra("type")
+        id = intent.getStringExtra("id")
+        type = intent.getStringExtra("type")
 
-        setupContent(schedule,type)
+        presenter = MatchPresenter(this,request,gson)
+        presenter.getMatchDetail(id)
 
+        favoriteState()
         setupToolbar()
-    }
-
-    private fun setupContent(schedule:Schedule,type:String){
-        tv_date.text = dateConvert(schedule.dateEvent!!)
-
-        tv_score_home.text = schedule.homeScore
-        tv_score_away.text = schedule.awayScore
-
-        tv_team_home.text = schedule.homeTeam
-        tv_team_away.text = schedule.awayTeam
-
-        tv_goal_home.text = schedule.homeGoalDetails
-        tv_goal_away.text = schedule.awayGoalDetails
-
-        tv_shot_home.text = schedule.homeShots
-        tv_shot_away.text = schedule.awayShots
-
-        tv_keeper_home.text = schedule.homeKeeper
-        tv_keeper_away.text = schedule.awayKeeper
-
-        tv_defense_home.text = schedule.homeDefense
-        tv_defense_away.text = schedule.awayDefense
-
-        tv_midfield_home.text = schedule.homeMidfield
-        tv_midfield_away.text = schedule.awayMidfield
-
-        tv_forward_home.text = schedule.homeForward
-        tv_forward_away.text = schedule.awayForward
-
-        tv_substitute_home.text = schedule.homeSubstitutes
-        tv_substitute_away.text = schedule.awaySubstitutes
-
-        if(type.equals(BuildConfig.NEXT)){
-            score_wrapper.gone()
-            loadBadge(schedule.idHomeTeam!!,iv_home)
-            loadBadge(schedule.idAwayTeam!!,iv_away)
-        }else{
-            badge_wrapper.gone()
-        }
     }
 
     private fun loadBadge(teamId: String,iv: ImageView) {
@@ -91,12 +71,125 @@ class MatchActivity : AppCompatActivity() {
         supportActionBar?.title = "Match Detail"
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == android.R.id.home) {
-            finish()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_menu,menu)
+        menuItem = menu
+        setFavorite()
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            R.id.add_to_favorite -> {
+                if(isFavorite) removeFromFavorite() else addToFavorite()
+
+                isFavorite = !isFavorite
+                setFavorite()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    private fun favoriteState(){
+        database.use {
+            val result = select(Favorite.TABLE_FAVORITE)
+                    .whereArgs("(MATCH_ID = {id})",
+                            "id" to id)
+            val favorite = result.parseList(classParser<Favorite>())
+            if (!favorite.isEmpty()) isFavorite = true
+        }
+    }
+
+    private fun addToFavorite(){
+        try {
+            database.use {
+                insert(Favorite.TABLE_FAVORITE,
+                        Favorite.TEAM_HOME_ID to match.idHomeTeam,
+                        Favorite.MATCH_ID to match.idEvent,
+                        Favorite.MATCH_TYPE to type,
+                        Favorite.MATCH_DATE to match.dateEvent,
+                        Favorite.TEAM_AWAY_ID to match.idAwayTeam,
+                        Favorite.TEAM_HOME_NAME to match.homeTeam,
+                        Favorite.TEAM_AWAY_NAME to match.awayTeam,
+                        Favorite.TEAM_HOME_SCORE to match.homeScore,
+                        Favorite.TEAM_AWAY_SCORE to match.awayScore)
+            }
+            toast("Added to favorite").show()
+        }catch (e: SQLiteConstraintException){
+            toast(e.localizedMessage).show()
+        }
+    }
+
+    private fun removeFromFavorite(){
+        try {
+            database.use {
+                delete(Favorite.TABLE_FAVORITE, "(MATCH_ID = {id})", "id" to id)
+            }
+            toast("Remove from favorite").show()
+        }catch (e: SQLiteConstraintException){
+            toast(e.localizedMessage).show()
+        }
+    }
+
+    private fun setFavorite() {
+        if (isFavorite)
+            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_added_to_favorites)
+        else
+            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_add_to_favorites)
+    }
+
+    override fun showLoading() {
+        progressBar.visible()
+    }
+
+    override fun hideLoading() {
+        progressBar.gone()
+    }
+
+    override fun showMatchDetail(data: List<Schedule>) {
+        match = data[0]
+        tv_date.text = dateConvert(match.dateEvent!!)
+
+        tv_score_home.text = match.homeScore
+        tv_score_away.text = match.awayScore
+
+        tv_team_home.text = match.homeTeam
+        tv_team_away.text = match.awayTeam
+
+        tv_goal_home.text = match.homeGoalDetails
+        tv_goal_away.text = match.awayGoalDetails
+
+        tv_shot_home.text = match.homeShots
+        tv_shot_away.text = match.awayShots
+
+        tv_keeper_home.text = match.homeKeeper
+        tv_keeper_away.text = match.awayKeeper
+
+        tv_defense_home.text = match.homeDefense
+        tv_defense_away.text = match.awayDefense
+
+        tv_midfield_home.text = match.homeMidfield
+        tv_midfield_away.text = match.awayMidfield
+
+        tv_forward_home.text = match.homeForward
+        tv_forward_away.text = match.awayForward
+
+        tv_substitute_home.text = match.homeSubstitutes
+        tv_substitute_away.text = match.awaySubstitutes
+
+        if(type.equals(BuildConfig.NEXT)){
+            score_wrapper.gone()
+            loadBadge(match.idHomeTeam!!,iv_home)
+            loadBadge(match.idAwayTeam!!,iv_away)
+        }else{
+            badge_wrapper.gone()
         }
     }
 }
