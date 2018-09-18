@@ -17,7 +17,6 @@
 
             <TextView
                 android:id="@+id/tv_top"
-                android:text="top"
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp"
                 android:gravity="center_horizontal"
@@ -28,7 +27,6 @@
 
             <TextView
                 android:id="@+id/tv_left"
-                android:text="left"
                 android:textSize="18sp"
                 android:gravity="end"
                 android:ellipsize="end"
@@ -40,7 +38,6 @@
                 app:layout_constraintRight_toLeftOf="@id/tv_middle"/>
             <TextView
                 android:id="@+id/tv_middle"
-                android:text="middle"
                 android:textSize="18sp"
                 android:gravity="center_horizontal"
                 android:layout_width="0dp"
@@ -50,7 +47,6 @@
                 app:layout_constraintRight_toLeftOf="@id/tv_right"/>
             <TextView
                 android:id="@+id/tv_right"
-                android:text="right"
                 android:textSize="18sp"
                 android:gravity="start"
                 android:ellipsize="end"

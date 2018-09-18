@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.model.Favorite
-import com.walukustudio.kotlin.model.Schedule
 import com.walukustudio.kotlin.utils.dateConvert
 import kotlinx.android.synthetic.main.item_schedule.view.*
 
@@ -33,12 +32,11 @@ class FavScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val tvLeft : TextView = view.tv_left
     private val tvMiddle : TextView = view.tv_middle
     private val tvRight : TextView = view.tv_right
-    private lateinit var schedule : Schedule
 
     fun bindItem(favorite : Favorite, clicklistener: (Favorite) -> Unit) {
 
         val score = if(favorite.teamHomeScore != null && favorite.teamAwayScore != null){
-            favorite.teamHomeScore + "  vs  " + favorite.teamAwayScore
+            "${favorite.teamHomeScore}  vs  ${favorite.teamAwayScore}"
         }else{
             " vs "
         }
