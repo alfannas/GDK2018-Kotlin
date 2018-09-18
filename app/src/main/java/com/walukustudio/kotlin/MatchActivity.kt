@@ -3,7 +3,6 @@ package com.walukustudio.kotlin
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -29,7 +28,6 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
     private val request = ApiRepository()
     private val gson = Gson()
 
-    private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var presenter: MatchPresenter
     private lateinit var match: Schedule
     private lateinit var id: String
@@ -53,15 +51,17 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
         setupToolbar()
     }
 
-    private fun loadBadge(teamId: String,iv: ImageView) {
-        doAsync {
-            val data = gson.fromJson(request.doRequest(TheSportDBApi.getTeamDetail(teamId)),
-                    TeamResponse::class.java)
+    private fun loadBadge(teamId: String?,iv: ImageView) {
+        if(teamId != null){
+            doAsync {
+                val data = gson.fromJson(request.doRequest(TheSportDBApi.getTeamDetail(teamId)),
+                        TeamResponse::class.java)
 
-            val teams : List<Team> = data.teams
+                val teams : List<Team> = data.teams
 
-            uiThread {
-                Picasso.get().load(teams[0].teamBadge).into(iv)
+                uiThread {
+                    Picasso.get().load(teams[0].teamBadge).into(iv)
+                }
             }
         }
     }
@@ -184,10 +184,10 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
         tv_substitute_home.text = match.homeSubstitutes
         tv_substitute_away.text = match.awaySubstitutes
 
-        if(type.equals(BuildConfig.NEXT)){
+        if(type.equals(BuildConfig.NEXT) && match.idHomeTeam != null && match.idAwayTeam != null){
             score_wrapper.gone()
-            loadBadge(match.idHomeTeam!!,iv_home)
-            loadBadge(match.idAwayTeam!!,iv_away)
+            loadBadge(match.idHomeTeam,iv_home)
+            loadBadge(match.idAwayTeam,iv_away)
         }else{
             badge_wrapper.gone()
         }

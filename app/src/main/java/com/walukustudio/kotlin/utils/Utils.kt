@@ -32,15 +32,20 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
     supportFragmentManager.inTransaction{replace(frameId, fragment)}
 }
 
-fun dateConvert(date:String):String{
-    val locale = Locale("id")
+fun dateConvert(date:String?):String {
 
-    val input = SimpleDateFormat("dd/MM/yy")
-    val output = SimpleDateFormat("E, dd MMM yyyy",locale)
+    val result = if (date != null) {
+        val locale = Locale("id")
 
-    val indate: Date = input.parse(date)
+        val input = SimpleDateFormat("dd/MM/yy", Locale.US)
+        val output = SimpleDateFormat("E, dd MMM yyyy", locale)
 
-    return output.format(indate)
+        val indate: Date = input.parse(date)
+        output.format(indate)
+    }else{
+        "undefined"
+    }
+    return result
 }
 
 

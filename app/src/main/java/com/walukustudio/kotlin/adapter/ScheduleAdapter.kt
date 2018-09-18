@@ -45,7 +45,7 @@ class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             else -> "Undefined"
         }
 
-        tvTop.text = dateConvert(schedule.dateEvent!!)
+        tvTop.text = dateConvert(schedule.dateEvent)
         tvLeft.text = schedule.homeTeam
         tvMiddle.text = score
         tvRight.text = schedule.awayTeam

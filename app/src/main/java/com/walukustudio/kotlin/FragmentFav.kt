@@ -8,13 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import com.google.gson.Gson
 import com.walukustudio.kotlin.adapter.FavoriteAdapter
 import com.walukustudio.kotlin.model.Favorite
-import com.walukustudio.kotlin.model.Schedule
-import com.walukustudio.kotlin.model.ScheduleResponse
-import com.walukustudio.kotlin.network.ApiRepository
-import com.walukustudio.kotlin.network.TheSportDBApi
 import com.walukustudio.kotlin.ui.ScheduleUI
 import com.walukustudio.kotlin.utils.database
 import com.walukustudio.kotlin.utils.invisible
@@ -68,20 +63,13 @@ class FragmentFav : Fragment() {
     private fun showFavorite(){
         context?.database?.use {
             swipeRefresh.isRefreshing = false
-            var result = select(Favorite.TABLE_FAVORITE)
-            var favorite = result.parseList(classParser<Favorite>())
+            val result = select(Favorite.TABLE_FAVORITE)
+            val favorite = result.parseList(classParser<Favorite>())
             favorites.addAll(favorite)
             adapter.notifyDataSetChanged()
         }
     }
-    private fun loadSchedule(eventId : String): Schedule{
-        val gson = Gson()
-        val request = ApiRepository()
-        val data = gson.fromJson(request.doRequest(TheSportDBApi.getScheduleDetail(eventId)),
-                ScheduleResponse::class.java)
 
-        return data.events[0]
-    }
     companion object {
         fun newInstance(): FragmentFav = FragmentFav()
     }
