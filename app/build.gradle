@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.walukustudio.project5"
+        applicationId "com.walukustudio.project6"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
@@ -25,10 +25,21 @@ android {
     }
 }
 
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    //anko
+
+    // Anko
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 
@@ -39,7 +50,10 @@ dependencies {
     // Anko Databases
     implementation "org.jetbrains.anko:anko-sqlite:$anko_version"
 
-    //support library
+    // Coroutines
+    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
+
+    // Support library
     implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
     implementation 'com.android.support:exifinterface:28.0.0-rc02'
     implementation 'com.android.support:design:28.0.0-rc02'
@@ -55,6 +69,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
-androidExtensions {
-    experimental = true
-}
+

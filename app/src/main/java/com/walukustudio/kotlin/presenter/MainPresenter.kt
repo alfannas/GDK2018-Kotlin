@@ -5,6 +5,9 @@ import com.walukustudio.kotlin.model.TeamResponse
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
 import com.walukustudio.kotlin.view.MainView
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -15,14 +18,12 @@ class MainPresenter(
 
     fun getTeamList(league: String?){
         view.showLoading()
-        doAsync {
-            val data = gson.fromJson(apiRepository.doRequest(TheSportDBApi.getTeams(league)),
+        async(UI){
+            val data = bg { gson.fromJson(apiRepository.doRequest(TheSportDBApi.getTeams(league)),
                     TeamResponse::class.java)
-
-            uiThread {
-                view.hideLoading()
-                view.showTeamList(data.teamsFootbal)
             }
+            view.showTeamList(data.await().teamsFootbal)
+            view.hideLoading()
         }
     }
 }

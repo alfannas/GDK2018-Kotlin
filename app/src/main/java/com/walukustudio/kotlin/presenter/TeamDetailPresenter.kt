@@ -5,6 +5,10 @@ import com.walukustudio.kotlin.model.TeamResponse
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
 import com.walukustudio.kotlin.view.TeamDetailView
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
+import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -15,14 +19,14 @@ class TeamDetailPresenter(
 
     fun getTeamDetail(teamId: String){
         view.showLoading()
-        doAsync {
-            val data = gson.fromJson(apiRepository.doRequest(TheSportDBApi.getTeamDetail(teamId)),
-            TeamResponse::class.java)
-
-            uiThread {
-                view.hideLoading()
-                view.showTeamDetail(data.teamsFootbal)
+        async(UI){
+            val data = bg {
+                gson.fromJson(apiRepository.doRequest(TheSportDBApi.getTeamDetail(teamId)),
+                        TeamResponse::class.java)
             }
+
+            view.showTeamDetail(data.await().teamsFootbal)
+            view.hideLoading()
         }
     }
 }
