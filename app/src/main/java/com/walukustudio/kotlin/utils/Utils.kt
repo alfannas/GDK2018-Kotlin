@@ -1,10 +1,13 @@
 package com.walukustudio.kotlin.utils
 
+import android.annotation.SuppressLint
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 fun View.visible() {
@@ -24,5 +27,10 @@ fun AppCompatActivity.addFragment(fragment: Fragment, frameId: Int){
 }
 fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
     supportFragmentManager.inTransaction{replace(frameId, fragment)}
+}
+
+@SuppressLint("SimpleDateFormat")
+fun toSimpleString(date: Date?): String? = with(date ?: Date()) {
+    SimpleDateFormat("EEE, dd MMM yyy").format(this)
 }
 
