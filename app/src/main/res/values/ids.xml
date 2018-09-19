@@ -3,4 +3,9 @@
     <item name="team_badge" type="id" />
     <item name="team_name" type="id" />
     <item name="list_team" type="id"/>
+    <item name="spinner" type="id"/>
+    <item name="add_to_favorite" type="id"/>
+    <item name="navigationView" type="id"/>
+    <item name="nav_fav" type="id"/>
+    <item name="nav_teams" type="id"/>
 </resources>

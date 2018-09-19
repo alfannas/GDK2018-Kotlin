@@ -27,7 +27,7 @@
         android:background="@drawable/shadow"/>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigationView"
+        android:id="@id/navigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
