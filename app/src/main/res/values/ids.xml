@@ -7,10 +7,16 @@
     <item name="swipeRefresh" type="id"/>
     <item name="listTeam" type="id"/>
     <item name="progressBar" type="id"/>
+    <item name="list_match" type="id"/>
 
     <item name="item_date" type="id"/>
     <item name="item_team" type="id"/>
 
     <item name="past" type="id"/>
     <item name="next" type="id"/>
+
+    <item name="navigationView" type="id"/>
+
+    <!--menu-->
+    <item name="add_to_favorite" type="id"/>
 </resources>

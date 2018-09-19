@@ -41,7 +41,7 @@ class FavScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             " vs "
         }
 
-        tvTop.text = dateConvert(favorite.eventDate!!)
+        tvTop.text = dateConvert(favorite.eventDate)
         tvLeft.text = favorite.teamHomeName
         tvMiddle.text = score
         tvRight.text = favorite.teamAwayName

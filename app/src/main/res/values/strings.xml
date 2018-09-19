@@ -16,4 +16,6 @@
     <string name="forward">Forward</string>
     <string name="substitute">Substitutes</string>
 
+    <string name="toast_fav_added">Added to favorite</string>
+    <string name="toast_fav_remove">Removed from favorite</string>
 </resources>

@@ -49,10 +49,10 @@ class FragmentPrev : Fragment(), ScheduleView {
         val request = ApiRepository()
         val gson = Gson()
         presenter = SchedulePresenter(this,request,gson)
-        presenter.getScheduleList("4328","past")
+        presenter.getScheduleList("4328",BuildConfig.PAST)
 
         swipeRefresh.onRefresh {
-            presenter.getScheduleList("4328","past")
+            presenter.getScheduleList("4328",BuildConfig.PAST)
         }
 
         return view

@@ -132,7 +132,7 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
             database.use {
                 delete(Favorite.TABLE_FAVORITE, "(MATCH_ID = {id})", "id" to id)
             }
-            toast("Remove from favorite").show()
+            toast("Removed from favorite").show()
         }catch (e: SQLiteConstraintException){
             toast(e.localizedMessage).show()
         }
