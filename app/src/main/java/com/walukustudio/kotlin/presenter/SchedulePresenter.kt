@@ -1,5 +1,6 @@
 package com.walukustudio.kotlin.presenter
 
+import android.support.test.espresso.idling.CountingIdlingResource
 import com.google.gson.Gson
 import com.walukustudio.kotlin.BuildConfig
 import com.walukustudio.kotlin.model.ScheduleResponse
@@ -9,15 +10,14 @@ import com.walukustudio.kotlin.utils.CoroutineContextProvider
 import com.walukustudio.kotlin.view.ScheduleView
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
-import org.jetbrains.anko.custom.async
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class SchedulePresenter (
         private val view: ScheduleView,
         private val apiRepository: ApiRepository,
         private val gson: Gson,
         private val context: CoroutineContextProvider = CoroutineContextProvider()) {
+
+    private val serverIdlingResource = CountingIdlingResource("NetworkCallSchedule")
 
     fun getScheduleList(id: String?,type:String?) {
         view.showLoading()
@@ -37,6 +37,7 @@ class SchedulePresenter (
 //                view.showScheduleList(data.events)
 //            }
 //        }
+        serverIdlingResource.increment()
         async(context.main){
             val data = when(type){
                 BuildConfig.PAST -> bg {gson.fromJson(apiRepository.doRequest(TheSportDBApi.getPastSchedule(id)),
@@ -48,6 +49,8 @@ class SchedulePresenter (
             }
             view.showScheduleList(data.await().events)
             view.hideLoading()
+            serverIdlingResource.decrement()
         }
     }
+
 }

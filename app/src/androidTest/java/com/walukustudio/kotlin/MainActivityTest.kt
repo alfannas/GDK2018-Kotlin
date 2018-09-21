@@ -5,6 +5,7 @@ import android.support.test.espresso.Espresso.pressBack
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
+import android.support.test.espresso.idling.CountingIdlingResource
 import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
@@ -14,11 +15,25 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import android.support.test.espresso.IdlingRegistry
+import org.junit.Before
+
+
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
     @Rule
     @JvmField var acitityRule = ActivityTestRule(MainActivity::class.java)
+
+    @Before
+    @Throws(Exception::class)
+    fun setUp() {
+        val espresso = IdlingRegistry.getInstance()
+        val schedulePresenterIdlingResource = CountingIdlingResource("NetworkCallSchedule")
+        val matchPresenterIdlingResource = CountingIdlingResource("NetworkCallMatch")
+        espresso.register(schedulePresenterIdlingResource)
+        espresso.register(matchPresenterIdlingResource)
+    }
 
     @Test
     fun testAppBehaviour(){
