@@ -1,6 +1,7 @@
 package com.walukustudio.kotlin.presenter
 
 import android.support.test.espresso.idling.CountingIdlingResource
+import android.util.Log
 import com.google.gson.Gson
 import com.walukustudio.kotlin.model.ScheduleResponse
 import com.walukustudio.kotlin.network.ApiRepository
@@ -15,9 +16,10 @@ class MatchPresenter (private val view: MatchDetailView,
                       private val gson: Gson,
                       private val context: CoroutineContextProvider = CoroutineContextProvider()){
 
-    private val serverIdlingResource = CountingIdlingResource("NetworkCallMatch")
+    private val serverIdlingResource = CountingIdlingResource("GLOBAL")
 
     fun getMatchDetail(eventId: String){
+        serverIdlingResource.increment()
         view.showLoading()
 //        doAsync {
 //            val data = gson.fromJson(apiRepository.doRequest(TheSportDBApi.getScheduleDetail(eventId)),
@@ -28,13 +30,22 @@ class MatchPresenter (private val view: MatchDetailView,
 //                view.showMatchDetail(data.events)
 //            }
 //        }
-        serverIdlingResource.increment()
+
         async(context.main){
-            val data = bg { gson.fromJson(apiRepository.doRequest(TheSportDBApi.getScheduleDetail(eventId)),
-                    ScheduleResponse::class.java) }
-            view.showMatchDetail(data.await().events)
-            view.hideLoading()
-            serverIdlingResource.decrement()
+            try {
+                Log.d("MatchPresenter", serverIdlingResource.isIdleNow.toString())
+                val data = bg {
+                    gson.fromJson(apiRepository.doRequest(TheSportDBApi.getScheduleDetail(eventId)),
+                            ScheduleResponse::class.java)
+                }
+                view.showMatchDetail(data.await().events)
+                view.hideLoading()
+            }finally {
+                serverIdlingResource.decrement()
+                Log.d("MatchPresenter",serverIdlingResource.isIdleNow.toString())
+            }
+
         }
     }
+
 }

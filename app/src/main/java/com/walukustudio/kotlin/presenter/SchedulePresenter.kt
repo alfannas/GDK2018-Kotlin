@@ -17,9 +17,10 @@ class SchedulePresenter (
         private val gson: Gson,
         private val context: CoroutineContextProvider = CoroutineContextProvider()) {
 
-    private val serverIdlingResource = CountingIdlingResource("NetworkCallSchedule")
+    private val serverIdlingResource = CountingIdlingResource("GLOBAL")
 
     fun getScheduleList(id: String?,type:String?) {
+        serverIdlingResource.increment()
         view.showLoading()
 //        doAsync {
 //            val data = when (type){
@@ -37,20 +38,23 @@ class SchedulePresenter (
 //                view.showScheduleList(data.events)
 //            }
 //        }
-        serverIdlingResource.increment()
-        async(context.main){
-            val data = when(type){
-                BuildConfig.PAST -> bg {gson.fromJson(apiRepository.doRequest(TheSportDBApi.getPastSchedule(id)),
-                        ScheduleResponse::class.java)}
-                BuildConfig.NEXT -> bg { gson.fromJson(apiRepository.doRequest(TheSportDBApi.getNextSchedule(id)),
-                        ScheduleResponse::class.java) }
-                else -> bg { gson.fromJson(apiRepository.doRequest(TheSportDBApi.getPastSchedule(id)),
-                        ScheduleResponse::class.java) }
-            }
-            view.showScheduleList(data.await().events)
-            view.hideLoading()
-            serverIdlingResource.decrement()
-        }
-    }
 
+        async(context.main){
+            try {
+                val data = when(type){
+                    BuildConfig.PAST -> bg {gson.fromJson(apiRepository.doRequest(TheSportDBApi.getPastSchedule(id)),
+                            ScheduleResponse::class.java)}
+                    BuildConfig.NEXT -> bg { gson.fromJson(apiRepository.doRequest(TheSportDBApi.getNextSchedule(id)),
+                            ScheduleResponse::class.java) }
+                    else -> bg { gson.fromJson(apiRepository.doRequest(TheSportDBApi.getPastSchedule(id)),
+                            ScheduleResponse::class.java) }
+                }
+                view.showScheduleList(data.await().events)
+                view.hideLoading()
+            }finally {
+                serverIdlingResource.decrement()
+            }
+        }
+
+    }
 }

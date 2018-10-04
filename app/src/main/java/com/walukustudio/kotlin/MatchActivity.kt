@@ -56,11 +56,11 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
             doAsync {
                 val data = gson.fromJson(request.doRequest(TheSportDBApi.getTeamDetail(teamId)),
                         TeamResponse::class.java)
-
                 val teams : List<Team> = data.teams
 
                 uiThread {
                     Picasso.get().load(teams[0].teamBadge).into(iv)
+
                 }
             }
         }

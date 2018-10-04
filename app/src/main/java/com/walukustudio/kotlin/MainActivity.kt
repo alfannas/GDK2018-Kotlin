@@ -3,6 +3,7 @@ package com.walukustudio.kotlin
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.test.espresso.idling.CountingIdlingResource
 import kotlinx.android.synthetic.main.activity_main.*
 import com.walukustudio.kotlin.utils.replaceFragment
 

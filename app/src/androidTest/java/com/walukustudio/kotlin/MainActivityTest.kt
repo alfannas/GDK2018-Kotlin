@@ -16,34 +16,35 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import android.support.test.espresso.IdlingRegistry
+import android.util.Log
+import org.junit.After
 import org.junit.Before
 
 
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
+    private val idle = CountingIdlingResource("GLOBAL")
+
     @Rule
-    @JvmField var acitityRule = ActivityTestRule(MainActivity::class.java)
+    @JvmField var activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Before
-    @Throws(Exception::class)
     fun setUp() {
-        val espresso = IdlingRegistry.getInstance()
-        val schedulePresenterIdlingResource = CountingIdlingResource("NetworkCallSchedule")
-        val matchPresenterIdlingResource = CountingIdlingResource("NetworkCallMatch")
-        espresso.register(schedulePresenterIdlingResource)
-        espresso.register(matchPresenterIdlingResource)
+        IdlingRegistry.getInstance().register(idle)
+        Log.d("MatchPresenter-1",idle.isIdleNow.toString())
     }
 
     @Test
     fun testAppBehaviour(){
+
         onView(withId(R.id.listTeam)).check(matches(isDisplayed()))
         onView(withId(R.id.listTeam)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
         onView(withId(R.id.listTeam)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(10,click()))
 
         onView(withId(R.id.add_to_favorite)).check(matches(isDisplayed()))
         onView(withId(R.id.add_to_favorite)).perform(click())
-        onView(withText("Added to favorite")).inRoot(withDecorView(not(acitityRule.activity.window.decorView)))
+        onView(withText("Added to favorite")).inRoot(withDecorView(not(activityRule.activity.window.decorView)))
                 .check(matches(isDisplayed()))
         pressBack()
 
@@ -57,7 +58,7 @@ class MainActivityTest {
 
         onView(withId(R.id.add_to_favorite)).check(matches(isDisplayed()))
         onView(withId(R.id.add_to_favorite)).perform(click())
-        onView(withText("Added to favorite")).inRoot(withDecorView(not(acitityRule.activity.window.decorView)))
+        onView(withText("Added to favorite")).inRoot(withDecorView(not(activityRule.activity.window.decorView)))
                 .check(matches(isDisplayed()))
         pressBack()
 
@@ -69,8 +70,13 @@ class MainActivityTest {
 
         onView(withId(R.id.add_to_favorite)).check(matches(isDisplayed()))
         onView(withId(R.id.add_to_favorite)).perform(click())
-        onView(withText("Removed from favorite")).inRoot(withDecorView(not(acitityRule.activity.window.decorView)))
+        onView(withText("Removed from favorite")).inRoot(withDecorView(not(activityRule.activity.window.decorView)))
                 .check(matches(isDisplayed()))
         pressBack()
+    }
+
+    @After
+    fun setDown(){
+        IdlingRegistry.getInstance().unregister(idle)
     }
 }
