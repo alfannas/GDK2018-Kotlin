@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">Football Match Schedule</string>
 
+    <string name="nav_match">Matches</string>
+    <string name="nav_team">Teams</string>
+    <string name="nav_fav">Favorites</string>
+
+    <string name="tab_past">Past</string>
+    <string name="tab_next">Next</string>
+    <string name="tab_oview">Overview</string>
+    <string name="tab_player">Players</string>
+    <string name="tab_match">Matches</string>
+    <string name="tab_team">Teams</string>
+
     <string name="past">Prev Match</string>
     <string name="next">Next Match</string>
     <string name="fav">Favorites</string>

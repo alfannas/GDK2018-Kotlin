@@ -1,4 +1,4 @@
-package com.walukustudio.kotlin
+package com.walukustudio.kotlin.activities
 
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.view.MenuItem
 import android.widget.ImageView
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import com.walukustudio.kotlin.BuildConfig
+import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.model.*
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi

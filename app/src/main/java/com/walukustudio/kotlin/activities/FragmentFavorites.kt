@@ -1,4 +1,4 @@
-package com.walukustudio.kotlin
+package com.walukustudio.kotlin.activities
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.adapter.FavoriteAdapter
 import com.walukustudio.kotlin.model.Favorite
 import com.walukustudio.kotlin.ui.ScheduleUI
@@ -21,7 +22,7 @@ import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 
-class FragmentFav : Fragment() {
+class FragmentFavorites : Fragment() {
 
 
     private var favorites: MutableList<Favorite> = mutableListOf()
@@ -71,6 +72,6 @@ class FragmentFav : Fragment() {
     }
 
     companion object {
-        fun newInstance(): FragmentFav = FragmentFav()
+        fun newInstance(): FragmentFavorites = FragmentFavorites()
     }
 }

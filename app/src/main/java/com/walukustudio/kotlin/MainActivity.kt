@@ -3,7 +3,9 @@ package com.walukustudio.kotlin
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.test.espresso.idling.CountingIdlingResource
+import com.walukustudio.kotlin.activities.FragmentFavorites
+import com.walukustudio.kotlin.activities.matches.FragmentNext
+import com.walukustudio.kotlin.activities.matches.FragmentPrev
 import kotlinx.android.synthetic.main.activity_main.*
 import com.walukustudio.kotlin.utils.replaceFragment
 
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 replaceFragment(FragmentNext.newInstance(),R.id.container)
             }
             R.id.nav_fav -> {
-                replaceFragment(FragmentFav.newInstance(),R.id.container)
+                replaceFragment(FragmentFavorites.newInstance(),R.id.container)
             }
         }
         true
