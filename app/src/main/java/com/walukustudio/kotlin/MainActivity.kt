@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import com.walukustudio.kotlin.activities.FragmentFavorites
+import com.walukustudio.kotlin.activities.FragmentMatches
 import com.walukustudio.kotlin.activities.matches.FragmentNext
 import com.walukustudio.kotlin.activities.matches.FragmentPrev
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,15 +19,16 @@ class MainActivity : AppCompatActivity() {
 
         //val bottomNavigation: BottomNavigationView = findViewById(R.id.navigationView);
         navigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        navigationView.selectedItemId = R.id.nav_prev
+        navigationView.selectedItemId = R.id.nav_fav
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId){
-            R.id.nav_prev -> {
-                replaceFragment(FragmentPrev.newInstance(),R.id.container)
+            R.id.nav_match -> {
+                replaceFragment(FragmentMatches.newInstance(),R.id.container)
+                //replaceFragment(FragmentPrev.newInstance(),R.id.container)
             }
-            R.id.nav_next -> {
+            R.id.nav_team -> {
                 replaceFragment(FragmentNext.newInstance(),R.id.container)
             }
             R.id.nav_fav -> {

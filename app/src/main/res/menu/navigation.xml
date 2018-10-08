@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_prev"
+        android:id="@+id/nav_match"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_receipt_24px"
-        android:title="@string/past"/>
+        android:title="@string/nav_match"/>
 
     <item
-        android:id="@+id/nav_next"
+        android:id="@+id/nav_team"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_event_24px"
-        android:title="@string/next"/>
+        android:icon="@drawable/ic_baseline_account_box_24px"
+        android:title="@string/nav_team"/>
 
     <item
         android:id="@+id/nav_fav"
