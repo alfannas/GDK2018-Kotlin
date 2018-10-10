@@ -69,8 +69,22 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
     }
 
     private fun setupToolbar(){
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Match Detail"
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.title = "Match Detail"
+
+        // Set the toolbar as support action bar
+        setSupportActionBar(toolbar)
+
+        // Now get the support action bar
+        val actionBar = supportActionBar
+
+        // Set toolbar title/app title
+        actionBar?.title = "Match Detail"
+
+        // Display the app icon in action bar/toolbar
+        actionBar?.setDisplayShowHomeEnabled(true)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

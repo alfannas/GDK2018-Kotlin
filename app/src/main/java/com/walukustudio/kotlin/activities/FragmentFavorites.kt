@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.adapter.FavoriteAdapter
 import com.walukustudio.kotlin.model.Favorite
+import com.walukustudio.kotlin.ui.FavoritesUI
 import com.walukustudio.kotlin.ui.ScheduleUI
 import com.walukustudio.kotlin.utils.database
 import com.walukustudio.kotlin.utils.invisible
@@ -32,7 +33,7 @@ class FragmentFavorites : Fragment() {
     private lateinit var listEvent: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = ScheduleUI<Fragment>().createView(AnkoContext.create(ctx,this))
+        val view = FavoritesUI<Fragment>().createView(AnkoContext.create(ctx,this))
         listEvent = view.find(R.id.listTeam)
         progressBar = view.find(R.id.progressBar)
         swipeRefresh = view.find(R.id.swipeRefresh)

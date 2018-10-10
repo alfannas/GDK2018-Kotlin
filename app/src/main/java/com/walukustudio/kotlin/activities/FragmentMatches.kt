@@ -2,6 +2,7 @@ package com.walukustudio.kotlin.activities
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,15 @@ class FragmentMatches : Fragment() {
 
         view.tabs_main.setupWithViewPager(view.viewpager_main)
 
+        setupToolbar(view)
+
         return view
+    }
+
+    fun setupToolbar(view: View){
+        (activity as AppCompatActivity).setSupportActionBar(view.toolbar)
+        val actionBar = (activity as AppCompatActivity).supportActionBar
+        actionBar?.title = "Football Apps"
     }
 
     companion object {

@@ -37,7 +37,7 @@ fun dateConvert(date:String?):String {
     val result = if (date != null) {
         val locale = Locale("id")
 
-        val input = SimpleDateFormat("dd/MM/yy", Locale.US)
+        val input = SimpleDateFormat("yyyy-MM-dd",locale)
         val output = SimpleDateFormat("E, dd MMM yyyy", locale)
 
         val indate: Date = input.parse(date)

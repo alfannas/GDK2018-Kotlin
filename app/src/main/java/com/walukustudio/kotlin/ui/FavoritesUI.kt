@@ -11,7 +11,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-class ScheduleUI<T> : AnkoComponent<T> {
+class FavoritesUI<T> : AnkoComponent<T> {
     override fun createView(ui: AnkoContext<T>): View {
         return with(ui) {
             linearLayout {
@@ -20,10 +20,6 @@ class ScheduleUI<T> : AnkoComponent<T> {
                 topPadding = dip(16)
                 leftPadding = dip(16)
                 rightPadding = dip(16)
-
-                spinner{
-                    id = R.id.spinner
-                }
 
                 swipeRefreshLayout() {
                     id = R.id.swipeRefresh
