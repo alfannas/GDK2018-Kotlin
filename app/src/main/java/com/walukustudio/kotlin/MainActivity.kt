@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import com.walukustudio.kotlin.activities.FragmentFavorites
 import com.walukustudio.kotlin.activities.FragmentMatches
+import com.walukustudio.kotlin.activities.FragmentTeams
 import com.walukustudio.kotlin.activities.matches.FragmentNext
 import com.walukustudio.kotlin.activities.matches.FragmentPrev
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 //replaceFragment(FragmentPrev.newInstance(),R.id.container)
             }
             R.id.nav_team -> {
-                replaceFragment(FragmentNext.newInstance(),R.id.container)
+                replaceFragment(FragmentTeams.newInstance(),R.id.container)
             }
             R.id.nav_fav -> {
                 replaceFragment(FragmentFavorites.newInstance(),R.id.container)

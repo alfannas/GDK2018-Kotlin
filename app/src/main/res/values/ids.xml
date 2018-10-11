@@ -19,4 +19,5 @@
 
     <!--menu-->
     <item name="add_to_favorite" type="id"/>
+    <item name="search" type="id"/>
 </resources>
