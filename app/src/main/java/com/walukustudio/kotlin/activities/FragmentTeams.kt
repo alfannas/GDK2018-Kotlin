@@ -5,11 +5,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ProgressBar
 import android.widget.Spinner
@@ -32,6 +31,7 @@ import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
+import java.util.ArrayList
 
 class FragmentTeams : Fragment(),TeamView {
 
@@ -40,6 +40,7 @@ class FragmentTeams : Fragment(),TeamView {
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var spinner: Spinner
     private lateinit var toolbar: Toolbar
+    private lateinit var searchView: SearchView
 
     private var teams: MutableList<Team> = mutableListOf()
     private var leagues: MutableList<League> = mutableListOf()
@@ -52,7 +53,8 @@ class FragmentTeams : Fragment(),TeamView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val view = TeamUI<Fragment>().createView(AnkoContext.create(ctx,this))
+        //val view = TeamUI<Fragment>().createView(AnkoContext.create(ctx,this))
+        val view = inflater.inflate(R.layout.fragment_teams,container,false)
         listTeam = view.find(R.id.listTeam)
         progressBar = view.find(R.id.progressBar)
         swipeRefresh = view.find(R.id.swipeRefresh)
@@ -96,6 +98,44 @@ class FragmentTeams : Fragment(),TeamView {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         val actionBar = (activity as AppCompatActivity).supportActionBar
         actionBar?.title = "Football Apps"
+        this.setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        //val inflaterMenu = activity?.menuInflater
+        inflater.inflate(R.menu.search, menu)
+
+        val searchMenuItem = menu.findItem(R.id.search)
+        searchView = searchMenuItem.actionView as SearchView
+        searchView.queryHint = "Search"
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String): Boolean {
+
+                return false
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+
+                val templist : MutableList<Team> = mutableListOf()
+
+                for (temp in teams) {
+                    if(temp.teamName != null){
+                        if (temp.teamName!!.toLowerCase().contains(s.toLowerCase())) {
+                            templist.add(temp)
+                        }
+                    }
+                }
+
+                adapterTeam = TeamAdapter(templist){
+                    team: Team ->  itemClick(team)
+                }
+                listTeam.adapter = adapterTeam
+
+                return true
+            }
+        })
+
     }
 
     private fun itemClick(team:Team){
