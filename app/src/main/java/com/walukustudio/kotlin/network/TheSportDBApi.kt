@@ -69,6 +69,17 @@ object TheSportDBApi {
                 .build()
                 .toString()
     }
+    fun getPlayers(teamId: String?) : String{
+        return Uri.parse(BuildConfig.BASE_URL).buildUpon()
+                .appendPath("api")
+                .appendPath("v1")
+                .appendPath("json")
+                .appendPath(BuildConfig.TSDB_API_KEY)
+                .appendPath("lookup_all_players.php")
+                .appendQueryParameter("id", teamId)
+                .build()
+                .toString()
+    }
 
 
 }

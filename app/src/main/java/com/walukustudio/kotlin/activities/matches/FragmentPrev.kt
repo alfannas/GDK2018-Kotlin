@@ -11,7 +11,6 @@ import android.widget.*
 import com.google.gson.Gson
 import com.walukustudio.kotlin.BuildConfig
 import com.walukustudio.kotlin.R
-import com.walukustudio.kotlin.activities.MatchActivity
 import com.walukustudio.kotlin.adapter.LeagueSpinAdapter
 import com.walukustudio.kotlin.adapter.ScheduleAdapter
 import com.walukustudio.kotlin.model.League

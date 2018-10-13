@@ -9,10 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.walukustudio.kotlin.R
+import com.walukustudio.kotlin.activities.matches.MatchActivity
 import com.walukustudio.kotlin.adapter.FavoriteAdapter
 import com.walukustudio.kotlin.model.Favorite
 import com.walukustudio.kotlin.ui.FavoritesUI
-import com.walukustudio.kotlin.ui.ScheduleUI
 import com.walukustudio.kotlin.utils.database
 import com.walukustudio.kotlin.utils.invisible
 import org.jetbrains.anko.AnkoContext

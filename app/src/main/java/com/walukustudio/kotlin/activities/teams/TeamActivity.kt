@@ -1,4 +1,4 @@
-package com.walukustudio.kotlin.activities
+package com.walukustudio.kotlin.activities.teams
 
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
@@ -9,15 +9,18 @@ import android.view.MenuItem
 import android.widget.ImageView
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
-import com.walukustudio.kotlin.BuildConfig
 import com.walukustudio.kotlin.R
-import com.walukustudio.kotlin.model.*
+import com.walukustudio.kotlin.adapter.TabPagerAdapter
+import com.walukustudio.kotlin.model.Favorite
+import com.walukustudio.kotlin.model.Schedule
+import com.walukustudio.kotlin.model.Team
+import com.walukustudio.kotlin.model.TeamResponse
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
-import com.walukustudio.kotlin.presenter.MatchPresenter
-import com.walukustudio.kotlin.utils.*
-import com.walukustudio.kotlin.view.MatchDetailView
-import kotlinx.android.synthetic.main.activity_match.*
+import com.walukustudio.kotlin.presenter.TeamDetailPresenter
+import com.walukustudio.kotlin.utils.database
+import com.walukustudio.kotlin.view.TeamDetailView
+import kotlinx.android.synthetic.main.activity_team.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
@@ -26,31 +29,53 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
-class MatchActivity : AppCompatActivity(),MatchDetailView {
+class TeamActivity: AppCompatActivity() {
     private val request = ApiRepository()
     private val gson = Gson()
 
-    private lateinit var presenter: MatchPresenter
+    private lateinit var presenter: TeamDetailPresenter
     private lateinit var match: Schedule
     private lateinit var id: String
     private lateinit var type: String
+    private lateinit var team: Team
 
     private var menuItem: Menu? = null
     private var isFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_match)
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_team)
 
         val intent = intent
-        id = intent.getStringExtra("id")
-        type = intent.getStringExtra("type")
+        team = intent.getParcelableExtra("team")
 
-        presenter = MatchPresenter(this,request,gson)
-        presenter.getMatchDetail(id)
+        setupContent(team)
 
-        favoriteState()
+        val bundleOverview = Bundle()
+        bundleOverview.putString("overview", team.teamDescription)
+        val fragmentOverview = FragmentOverview()
+        fragmentOverview.arguments = bundleOverview
+
+        val bundlePlayers = Bundle()
+        bundlePlayers.putString("teamId", team.teamId)
+        val fragmentPlayers = FragmentPlayers()
+        fragmentPlayers.arguments = bundlePlayers
+
+        val fragmentAdapter = TabPagerAdapter(supportFragmentManager, fragmentOverview, fragmentPlayers,
+                "Overview","Players")
+        viewpager_main.adapter = fragmentAdapter
+
+        tabs_main.setupWithViewPager(viewpager_main)
+
+//        favoriteState()
         setupToolbar()
+    }
+
+    private fun setupContent(team: Team){
+        loadBadge(team.teamId,team_badge)
+        team_name.text = team.teamName
+        team_established.text = team.teamEstablished
+        team_stadium.text = team.teamStadium
     }
 
     private fun loadBadge(teamId: String?,iv: ImageView) {
@@ -69,8 +94,6 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
     }
 
     private fun setupToolbar(){
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        supportActionBar?.title = "Match Detail"
 
         // Set the toolbar as support action bar
         setSupportActionBar(toolbar)
@@ -79,7 +102,7 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
         val actionBar = supportActionBar
 
         // Set toolbar title/app title
-        actionBar?.title = "Match Detail"
+        actionBar?.title = ""
 
         // Display the app icon in action bar/toolbar
         actionBar?.setDisplayShowHomeEnabled(true)
@@ -161,51 +184,4 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
             menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_add_to_favorites)
     }
 
-    override fun showLoading() {
-        progressBar.visible()
-    }
-
-    override fun hideLoading() {
-        progressBar.gone()
-    }
-
-    override fun showMatchDetail(data: List<Schedule>) {
-        match = data[0]
-        tv_date.text = dateConvert(match.dateEvent!!)
-
-        tv_score_home.text = match.homeScore
-        tv_score_away.text = match.awayScore
-
-        tv_team_home.text = match.homeTeam
-        tv_team_away.text = match.awayTeam
-
-        tv_goal_home.text = match.homeGoalDetails
-        tv_goal_away.text = match.awayGoalDetails
-
-        tv_shot_home.text = match.homeShots
-        tv_shot_away.text = match.awayShots
-
-        tv_keeper_home.text = match.homeKeeper
-        tv_keeper_away.text = match.awayKeeper
-
-        tv_defense_home.text = match.homeDefense
-        tv_defense_away.text = match.awayDefense
-
-        tv_midfield_home.text = match.homeMidfield
-        tv_midfield_away.text = match.awayMidfield
-
-        tv_forward_home.text = match.homeForward
-        tv_forward_away.text = match.awayForward
-
-        tv_substitute_home.text = match.homeSubstitutes
-        tv_substitute_away.text = match.awaySubstitutes
-
-        if(type.equals(BuildConfig.NEXT) && match.idHomeTeam != null && match.idAwayTeam != null){
-            score_wrapper.gone()
-            loadBadge(match.idHomeTeam,iv_home)
-            loadBadge(match.idAwayTeam,iv_away)
-        }else{
-            badge_wrapper.gone()
-        }
-    }
 }

@@ -27,6 +27,9 @@
     <string name="forward">Forward</string>
     <string name="substitute">Substitutes</string>
 
+    <string name="player_weight_title">Weight(kg)</string>
+    <string name="player_height_title">Height(m)</string>
+
     <string name="toast_fav_added">Added to favorite</string>
     <string name="toast_fav_remove">Removed from favorite</string>
 </resources>

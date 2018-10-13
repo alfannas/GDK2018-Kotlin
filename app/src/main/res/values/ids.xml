@@ -2,12 +2,22 @@
 <resources>
     <item name="team_badge" type="id" />
     <item name="team_name" type="id" />
+    <item name="team_established" type="id"/>
+    <item name="team_stadium" type="id"/>
+
+    <item name="player_pic" type="id"/>
+    <item name="player_name" type="id"/>
+    <item name="player_weight" type="id"/>
+    <item name="player_height" type="id"/>
+    <item name="player_position" type="id"/>
+    <item name="player_description" type="id"/>
 
     <item name="spinner" type="id"/>
     <item name="swipeRefresh" type="id"/>
     <item name="listTeam" type="id"/>
     <item name="progressBar" type="id"/>
     <item name="list_match" type="id"/>
+    <item name="overview" type="id"/>
 
     <item name="item_date" type="id"/>
     <item name="item_team" type="id"/>

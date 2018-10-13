@@ -11,15 +11,11 @@ import android.widget.*
 import com.google.gson.Gson
 import com.walukustudio.kotlin.BuildConfig
 import com.walukustudio.kotlin.R
-import com.walukustudio.kotlin.activities.MatchActivity
 import com.walukustudio.kotlin.adapter.LeagueSpinAdapter
 import com.walukustudio.kotlin.adapter.ScheduleAdapter
-import com.walukustudio.kotlin.adapter.TeamAdapter
 import com.walukustudio.kotlin.model.League
 import com.walukustudio.kotlin.model.Schedule
-import com.walukustudio.kotlin.model.Team
 import com.walukustudio.kotlin.network.ApiRepository
-import com.walukustudio.kotlin.network.TheSportDBApi
 import com.walukustudio.kotlin.presenter.SchedulePresenter
 import com.walukustudio.kotlin.ui.ScheduleUI
 import com.walukustudio.kotlin.utils.invisible

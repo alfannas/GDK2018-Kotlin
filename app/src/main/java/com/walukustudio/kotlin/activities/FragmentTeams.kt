@@ -7,33 +7,30 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ProgressBar
 import android.widget.Spinner
 import com.google.gson.Gson
 import com.walukustudio.kotlin.R
+import com.walukustudio.kotlin.activities.matches.MatchActivity
+import com.walukustudio.kotlin.activities.teams.TeamActivity
 import com.walukustudio.kotlin.adapter.LeagueSpinAdapter
 import com.walukustudio.kotlin.adapter.TeamAdapter
 import com.walukustudio.kotlin.model.League
-import com.walukustudio.kotlin.model.Schedule
 import com.walukustudio.kotlin.model.Team
 import com.walukustudio.kotlin.network.ApiRepository
+import com.walukustudio.kotlin.presenter.TeamDetailPresenter
 import com.walukustudio.kotlin.presenter.TeamPresenter
-import com.walukustudio.kotlin.ui.TeamUI
 import com.walukustudio.kotlin.utils.invisible
 import com.walukustudio.kotlin.utils.visible
-import com.walukustudio.kotlin.view.TeamView
-import kotlinx.android.synthetic.main.fragment_matches.view.*
-import org.jetbrains.anko.AnkoContext
+import com.walukustudio.kotlin.view.TeamsView
 import org.jetbrains.anko.find
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
-import java.util.ArrayList
 
-class FragmentTeams : Fragment(),TeamView {
+class FragmentTeams : Fragment(), TeamsView {
 
     private lateinit var listTeam: RecyclerView
     private lateinit var progressBar: ProgressBar
@@ -139,7 +136,7 @@ class FragmentTeams : Fragment(),TeamView {
     }
 
     private fun itemClick(team:Team){
-        startActivity<MatchActivity>("id" to team.teamId)
+        startActivity<TeamActivity>("team" to team)
     }
 
     override fun showLoading() {
