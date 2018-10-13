@@ -1,6 +1,6 @@
 package com.walukustudio.kotlin.model
 
-data class Favorite (
+data class FavoriteMatch (
         val id: Long?,
         val eventId: String?,
         val eventType: String?,
@@ -12,7 +12,7 @@ data class Favorite (
         val teamHomeScore: String?,
         val teamAwayScore: String?){
     companion object {
-        const val TABLE_FAVORITE: String = "TABLE_FAVORITE"
+        const val TABLE_FAVORITE_MATCH: String = "TABLE_FAVORITE_MATCH"
         const val ID:String = "ID_"
         const val MATCH_ID: String = "MATCH_ID"
         const val MATCH_TYPE: String = "MATCH_TYPE"

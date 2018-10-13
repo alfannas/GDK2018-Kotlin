@@ -20,14 +20,13 @@ class MainActivity : AppCompatActivity() {
 
         //val bottomNavigation: BottomNavigationView = findViewById(R.id.navigationView);
         navigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        navigationView.selectedItemId = R.id.nav_fav
+        navigationView.selectedItemId = R.id.nav_match
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId){
             R.id.nav_match -> {
                 replaceFragment(FragmentMatches.newInstance(),R.id.container)
-                //replaceFragment(FragmentPrev.newInstance(),R.id.container)
             }
             R.id.nav_team -> {
                 replaceFragment(FragmentTeams.newInstance(),R.id.container)

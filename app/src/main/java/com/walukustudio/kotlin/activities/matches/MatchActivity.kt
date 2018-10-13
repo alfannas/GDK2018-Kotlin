@@ -69,8 +69,6 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
     }
 
     private fun setupToolbar(){
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        supportActionBar?.title = "Match Detail"
 
         // Set the toolbar as support action bar
         setSupportActionBar(toolbar)
@@ -115,10 +113,10 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
 
     private fun favoriteState(){
         database.use {
-            val result = select(Favorite.TABLE_FAVORITE)
+            val result = select(FavoriteMatch.TABLE_FAVORITE_MATCH)
                     .whereArgs("(MATCH_ID = {id})",
                             "id" to id)
-            val favorite = result.parseList(classParser<Favorite>())
+            val favorite = result.parseList(classParser<FavoriteMatch>())
             if (!favorite.isEmpty()) isFavorite = true
         }
     }
@@ -126,16 +124,16 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
     private fun addToFavorite(){
         try {
             database.use {
-                insert(Favorite.TABLE_FAVORITE,
-                        Favorite.TEAM_HOME_ID to match.idHomeTeam,
-                        Favorite.MATCH_ID to match.idEvent,
-                        Favorite.MATCH_TYPE to type,
-                        Favorite.MATCH_DATE to match.dateEvent,
-                        Favorite.TEAM_AWAY_ID to match.idAwayTeam,
-                        Favorite.TEAM_HOME_NAME to match.homeTeam,
-                        Favorite.TEAM_AWAY_NAME to match.awayTeam,
-                        Favorite.TEAM_HOME_SCORE to match.homeScore,
-                        Favorite.TEAM_AWAY_SCORE to match.awayScore)
+                insert(FavoriteMatch.TABLE_FAVORITE_MATCH,
+                        FavoriteMatch.TEAM_HOME_ID to match.idHomeTeam,
+                        FavoriteMatch.MATCH_ID to match.idEvent,
+                        FavoriteMatch.MATCH_TYPE to type,
+                        FavoriteMatch.MATCH_DATE to match.dateEvent,
+                        FavoriteMatch.TEAM_AWAY_ID to match.idAwayTeam,
+                        FavoriteMatch.TEAM_HOME_NAME to match.homeTeam,
+                        FavoriteMatch.TEAM_AWAY_NAME to match.awayTeam,
+                        FavoriteMatch.TEAM_HOME_SCORE to match.homeScore,
+                        FavoriteMatch.TEAM_AWAY_SCORE to match.awayScore)
             }
             toast("Added to favorite").show()
         }catch (e: SQLiteConstraintException){
@@ -146,7 +144,7 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
     private fun removeFromFavorite(){
         try {
             database.use {
-                delete(Favorite.TABLE_FAVORITE, "(MATCH_ID = {id})", "id" to id)
+                delete(FavoriteMatch.TABLE_FAVORITE_MATCH, "(MATCH_ID = {id})", "id" to id)
             }
             toast("Removed from favorite").show()
         }catch (e: SQLiteConstraintException){

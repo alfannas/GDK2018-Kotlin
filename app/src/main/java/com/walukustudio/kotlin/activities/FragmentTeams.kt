@@ -136,7 +136,9 @@ class FragmentTeams : Fragment(), TeamsView {
     }
 
     private fun itemClick(team:Team){
-        startActivity<TeamActivity>("team" to team)
+        startActivity<TeamActivity>(
+                "team" to team,
+                "type" to "normal")
     }
 
     override fun showLoading() {

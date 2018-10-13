@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.walukustudio.kotlin.R
-import com.walukustudio.kotlin.model.Favorite
+import com.walukustudio.kotlin.model.FavoriteMatch
 import com.walukustudio.kotlin.utils.dateConvert
 import kotlinx.android.synthetic.main.item_schedule.view.*
 
-class FavoriteAdapter (private val context: Context, private val favorites: List<Favorite>, private val clicklistener: (Favorite) -> Unit)
+class FavoriteMatchAdapter (private val context: Context, private val favorites: List<FavoriteMatch>, private val clicklistener: (FavoriteMatch) -> Unit)
     : RecyclerView.Adapter<FavScheduleViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavScheduleViewHolder {
         return FavScheduleViewHolder(LayoutInflater.from(context).inflate(R.layout.item_schedule, parent, false))
@@ -33,7 +33,7 @@ class FavScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val tvMiddle : TextView = view.tv_middle
     private val tvRight : TextView = view.tv_right
 
-    fun bindItem(favorite : Favorite, clicklistener: (Favorite) -> Unit) {
+    fun bindItem(favorite : FavoriteMatch, clicklistener: (FavoriteMatch) -> Unit) {
 
         val score = if(favorite.teamHomeScore != null && favorite.teamAwayScore != null){
             "${favorite.teamHomeScore}  vs  ${favorite.teamAwayScore}"

@@ -11,15 +11,11 @@ import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.adapter.TabPagerAdapter
-import com.walukustudio.kotlin.model.Favorite
-import com.walukustudio.kotlin.model.Schedule
-import com.walukustudio.kotlin.model.Team
-import com.walukustudio.kotlin.model.TeamResponse
+import com.walukustudio.kotlin.model.*
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
 import com.walukustudio.kotlin.presenter.TeamDetailPresenter
 import com.walukustudio.kotlin.utils.database
-import com.walukustudio.kotlin.view.TeamDetailView
 import kotlinx.android.synthetic.main.activity_team.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
@@ -34,9 +30,7 @@ class TeamActivity: AppCompatActivity() {
     private val gson = Gson()
 
     private lateinit var presenter: TeamDetailPresenter
-    private lateinit var match: Schedule
     private lateinit var id: String
-    private lateinit var type: String
     private lateinit var team: Team
 
     private var menuItem: Menu? = null
@@ -48,6 +42,7 @@ class TeamActivity: AppCompatActivity() {
 
         val intent = intent
         team = intent.getParcelableExtra("team")
+        id = team.teamId.toString()
 
         setupContent(team)
 
@@ -67,7 +62,7 @@ class TeamActivity: AppCompatActivity() {
 
         tabs_main.setupWithViewPager(viewpager_main)
 
-//        favoriteState()
+        favoriteState()
         setupToolbar()
     }
 
@@ -138,10 +133,10 @@ class TeamActivity: AppCompatActivity() {
 
     private fun favoriteState(){
         database.use {
-            val result = select(Favorite.TABLE_FAVORITE)
-                    .whereArgs("(MATCH_ID = {id})",
+            val result = select(FavoriteTeam.TABLE_FAVORITE_TEAM)
+                    .whereArgs("(TEAM_ID = {id})",
                             "id" to id)
-            val favorite = result.parseList(classParser<Favorite>())
+            val favorite = result.parseList(classParser<FavoriteTeam>())
             if (!favorite.isEmpty()) isFavorite = true
         }
     }
@@ -149,16 +144,13 @@ class TeamActivity: AppCompatActivity() {
     private fun addToFavorite(){
         try {
             database.use {
-                insert(Favorite.TABLE_FAVORITE,
-                        Favorite.TEAM_HOME_ID to match.idHomeTeam,
-                        Favorite.MATCH_ID to match.idEvent,
-                        Favorite.MATCH_TYPE to type,
-                        Favorite.MATCH_DATE to match.dateEvent,
-                        Favorite.TEAM_AWAY_ID to match.idAwayTeam,
-                        Favorite.TEAM_HOME_NAME to match.homeTeam,
-                        Favorite.TEAM_AWAY_NAME to match.awayTeam,
-                        Favorite.TEAM_HOME_SCORE to match.homeScore,
-                        Favorite.TEAM_AWAY_SCORE to match.awayScore)
+                insert(FavoriteTeam.TABLE_FAVORITE_TEAM,
+                        FavoriteTeam.TEAM_ID to team.teamId,
+                        FavoriteTeam.TEAM_NAME to team.teamName,
+                        FavoriteTeam.TEAM_ESTABLISHED to team.teamEstablished,
+                        FavoriteTeam.TEAM_STADIUM to team.teamStadium,
+                        FavoriteTeam.TEAM_DESCRIPTION to team.teamDescription,
+                        FavoriteTeam.TEAM_BADGE to team.teamBadge)
             }
             toast("Added to favorite").show()
         }catch (e: SQLiteConstraintException){
@@ -169,7 +161,7 @@ class TeamActivity: AppCompatActivity() {
     private fun removeFromFavorite(){
         try {
             database.use {
-                delete(Favorite.TABLE_FAVORITE, "(MATCH_ID = {id})", "id" to id)
+                delete(FavoriteTeam.TABLE_FAVORITE_TEAM, "(TEAM_ID = {id})", "id" to id)
             }
             toast("Removed from favorite").show()
         }catch (e: SQLiteConstraintException){
