@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import com.google.gson.Gson
 import com.walukustudio.kotlin.BuildConfig
@@ -15,8 +14,10 @@ import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.activities.MatchActivity
 import com.walukustudio.kotlin.adapter.LeagueSpinAdapter
 import com.walukustudio.kotlin.adapter.ScheduleAdapter
+import com.walukustudio.kotlin.adapter.TeamAdapter
 import com.walukustudio.kotlin.model.League
 import com.walukustudio.kotlin.model.Schedule
+import com.walukustudio.kotlin.model.Team
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
 import com.walukustudio.kotlin.presenter.SchedulePresenter
@@ -36,6 +37,7 @@ class FragmentNext: Fragment(), ScheduleView {
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var spinner: Spinner
+    private lateinit var searchView: SearchView
 
     private var leagues: MutableList<League> = mutableListOf()
     private var schedules: MutableList<Schedule> = mutableListOf()
@@ -82,6 +84,8 @@ class FragmentNext: Fragment(), ScheduleView {
 //        Log.d("FragmentNext1",idLeague)
         presenter.getScheduleList("0", BuildConfig.NEXT)
 
+        setupToolbar()
+
         return view
     }
 
@@ -111,6 +115,48 @@ class FragmentNext: Fragment(), ScheduleView {
         schedules.clear()
         schedules.addAll(data)
         adapterSchedule.notifyDataSetChanged()
+    }
+
+    private fun setupToolbar(){
+        this.setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        //val inflaterMenu = activity?.menuInflater
+        inflater.inflate(R.menu.search, menu)
+
+        val searchMenuItem = menu.findItem(R.id.search)
+        searchView = searchMenuItem.actionView as SearchView
+        searchView.queryHint = "Search"
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String): Boolean {
+
+                return false
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+
+                val templist : MutableList<Schedule> = mutableListOf()
+
+                for (temp in schedules) {
+                    if(temp.homeTeam != null && temp.awayTeam != null){
+                        if (temp.homeTeam!!.toLowerCase().contains(s.toLowerCase()) ||
+                                temp.awayTeam!!.toLowerCase().contains(s.toLowerCase())) {
+                            templist.add(temp)
+                        }
+                    }
+                }
+
+                adapterSchedule = ScheduleAdapter(ctx,templist,BuildConfig.NEXT){
+                    schedule: Schedule ->  itemClick(schedule)
+                }
+                listTeam.adapter = adapterSchedule
+
+                return true
+            }
+        })
+
     }
 
     companion object {

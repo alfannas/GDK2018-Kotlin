@@ -10,7 +10,6 @@ import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.activities.matches.FragmentNext
 import com.walukustudio.kotlin.activities.matches.FragmentPrev
 import com.walukustudio.kotlin.adapter.TabPagerAdapter
-import kotlinx.android.synthetic.main.fragment_matches.*
 import kotlinx.android.synthetic.main.fragment_matches.view.*
 
 class FragmentMatches : Fragment() {
