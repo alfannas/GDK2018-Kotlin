@@ -9,8 +9,9 @@ import android.widget.TextView
 import com.walukustudio.kotlin.BuildConfig
 import com.walukustudio.kotlin.R
 import com.walukustudio.kotlin.model.Schedule
-import com.walukustudio.kotlin.utils.dateConvert
+import com.walukustudio.kotlin.utils.*
 import kotlinx.android.synthetic.main.item_schedule.view.*
+import java.util.*
 
 class ScheduleAdapter (private val context: Context, private val schedules: List<Schedule>, private val type: String, private val clicklistener: (Schedule) -> Unit)
     : RecyclerView.Adapter<ScheduleViewHolder>() {
@@ -33,6 +34,7 @@ class ScheduleAdapter (private val context: Context, private val schedules: List
 class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val tvTop: TextView = view.tv_top
+    private val tvTime: TextView = view.tv_time
     private val tvLeft : TextView = view.tv_left
     private val tvMiddle : TextView = view.tv_middle
     private val tvRight : TextView = view.tv_right
@@ -45,7 +47,13 @@ class ScheduleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             else -> "Undefined"
         }
 
-        tvTop.text = dateConvert(schedule.dateEvent)
+        val dateUT: Date = stringToDate(schedule.dateEvent, getNormalizedTime(schedule.timeEvent))
+        val dateLocal: Date = dateFromUTC(dateUT)
+
+        val dateTime = getDateTime(dateLocal)
+
+        tvTop.text = dateConvert(dateTime[0])
+        tvTime.text = timeConvert(dateTime[1])
         tvLeft.text = schedule.homeTeam
         tvMiddle.text = score
         tvRight.text = schedule.awayTeam

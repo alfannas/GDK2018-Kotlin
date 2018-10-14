@@ -3,10 +3,12 @@ package com.walukustudio.kotlin.activities.teams
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import com.walukustudio.kotlin.R
@@ -16,6 +18,9 @@ import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
 import com.walukustudio.kotlin.presenter.TeamDetailPresenter
 import com.walukustudio.kotlin.utils.database
+import com.walukustudio.kotlin.utils.gone
+import com.walukustudio.kotlin.utils.visible
+import com.walukustudio.kotlin.view.TeamDetailView
 import kotlinx.android.synthetic.main.activity_team.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
@@ -25,7 +30,8 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
-class TeamActivity: AppCompatActivity() {
+class TeamActivity: AppCompatActivity(),TeamDetailView {
+
     private val request = ApiRepository()
     private val gson = Gson()
 
@@ -41,26 +47,10 @@ class TeamActivity: AppCompatActivity() {
             setContentView(R.layout.activity_team)
 
         val intent = intent
-        team = intent.getParcelableExtra("team")
-        id = team.teamId.toString()
+        id = intent.getStringExtra("id")
 
-        setupContent(team)
-
-        val bundleOverview = Bundle()
-        bundleOverview.putString("overview", team.teamDescription)
-        val fragmentOverview = FragmentOverview()
-        fragmentOverview.arguments = bundleOverview
-
-        val bundlePlayers = Bundle()
-        bundlePlayers.putString("teamId", team.teamId)
-        val fragmentPlayers = FragmentPlayers()
-        fragmentPlayers.arguments = bundlePlayers
-
-        val fragmentAdapter = TabPagerAdapter(supportFragmentManager, fragmentOverview, fragmentPlayers,
-                "Overview","Players")
-        viewpager_main.adapter = fragmentAdapter
-
-        tabs_main.setupWithViewPager(viewpager_main)
+        presenter = TeamDetailPresenter(this,request,gson)
+        presenter.getTeamDetail(id)
 
         favoriteState()
         setupToolbar()
@@ -174,6 +164,35 @@ class TeamActivity: AppCompatActivity() {
             menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_added_to_favorites)
         else
             menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, R.drawable.ic_add_to_favorites)
+    }
+
+    override fun showLoading() {
+        progressBar.visible()
+    }
+
+    override fun hideLoading() {
+        progressBar.gone()
+    }
+
+    override fun showTeamDetail(data: List<Team>) {
+        team = data[0]
+        setupContent(team)
+
+        val bundleOverview = Bundle()
+        bundleOverview.putString("overview", team.teamDescription)
+        val fragmentOverview = FragmentOverview()
+        fragmentOverview.arguments = bundleOverview
+
+        val bundlePlayers = Bundle()
+        bundlePlayers.putString("teamId", team.teamId)
+        val fragmentPlayers = FragmentPlayers()
+        fragmentPlayers.arguments = bundlePlayers
+
+        val fragmentAdapter = TabPagerAdapter(supportFragmentManager, fragmentOverview, fragmentPlayers,
+                "Overview","Players")
+        viewpager_main.adapter = fragmentAdapter
+
+        tabs_main.setupWithViewPager(viewpager_main)
     }
 
 }

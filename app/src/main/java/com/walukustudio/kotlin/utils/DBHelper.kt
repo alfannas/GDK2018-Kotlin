@@ -24,6 +24,7 @@ class DBHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "FavoriteTeam.db",nu
                 "MATCH_ID" to TEXT,
                 "MATCH_TYPE" to TEXT,
                 "MATCH_DATE" to TEXT,
+                "MATCH_TIME" to TEXT,
                 "TEAM_HOME_ID" to TEXT,
                 "TEAM_AWAY_ID" to TEXT,
                 "TEAM_HOME_NAME" to TEXT,

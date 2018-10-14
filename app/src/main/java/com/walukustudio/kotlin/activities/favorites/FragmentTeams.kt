@@ -59,9 +59,7 @@ class FragmentTeams : Fragment() {
     }
 
     private fun itemClick(favorite: FavoriteTeam){
-        startActivity<TeamActivity>(
-                "team" to favorite,
-                "type" to "favorite")
+        startActivity<TeamActivity>("id" to favorite.teamId)
     }
 
     private fun showFavorite(){

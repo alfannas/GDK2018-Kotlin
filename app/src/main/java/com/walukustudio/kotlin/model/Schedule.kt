@@ -17,6 +17,9 @@ data class Schedule (
         @SerializedName("dateEvent")
         var dateEvent: String? = null,
 
+        @SerializedName("strTime")
+        var timeEvent: String? = null,
+
         @SerializedName("strHomeTeam")
         var homeTeam: String? = null,
         @SerializedName("strAwayTeam")

@@ -5,6 +5,7 @@ data class FavoriteMatch (
         val eventId: String?,
         val eventType: String?,
         val eventDate: String?,
+        val eventTime: String?,
         val teamHomeId: String?,
         val teamAwayId: String?,
         val teamHomeName: String?,
@@ -17,6 +18,7 @@ data class FavoriteMatch (
         const val MATCH_ID: String = "MATCH_ID"
         const val MATCH_TYPE: String = "MATCH_TYPE"
         const val MATCH_DATE: String = "MATCH_DATE"
+        const val MATCH_TIME: String = "MATCH_TIME"
         const val TEAM_HOME_ID: String = "TEAM_HOME_ID"
         const val TEAM_AWAY_ID: String = "TEAM_AWAY_ID"
         const val TEAM_HOME_NAME: String = "TEAM_HOME_NAME"

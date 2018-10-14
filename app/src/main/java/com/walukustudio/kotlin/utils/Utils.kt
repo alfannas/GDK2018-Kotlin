@@ -5,8 +5,10 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 fun View.visible() {
@@ -46,6 +48,69 @@ fun dateConvert(date:String?):String {
         "undefined"
     }
     return result
+}
+
+fun timeConvert(time:String):String{
+    val t : List<String> = time.split(":")
+
+    val hour: String = if(t[0].toInt() < 10) "0"+t[0] else t[0]
+    val minute: String = if(t[1].toInt() < 10) t[1]+"0" else t[1]
+
+    return "$hour:$minute"
+}
+
+fun getNormalizedTime(time:String?):String{
+    val result:String
+    if (time != null) {
+        val t : List<String> = time.split(":")
+        result = t[0]+":"+t[1]
+    }else{
+        result = "null"
+    }
+    return result
+}
+
+fun stringToDate(date: String?,time:String): Date {
+    val pattern:String
+
+    if(time != "null"){
+        pattern = "yyyy-MM-dd HH:mm"
+    }else{
+        pattern = "yyyy-MM-dd"
+    }
+
+    val dateTime = "$date $time"
+    val timeFormat = SimpleDateFormat(pattern)
+    var myDate = Date()
+    try {
+        myDate = timeFormat.parse(dateTime)
+
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+
+    return myDate
+}
+
+fun getDateTime(date:Date):List<String>{
+    val datetime:MutableList<String> = mutableListOf()
+    val calendar = Calendar.getInstance()
+    calendar.time = date
+    datetime.add(calendar.get(Calendar.YEAR).toString()
+            +"-"+(calendar.get(Calendar.MONTH)+1).toString()
+            +"-"+calendar.get(Calendar.DAY_OF_MONTH).toString())
+    datetime.add(calendar.get(Calendar.HOUR_OF_DAY).toString()
+            +":"+calendar.get(Calendar.MINUTE).toString())
+
+    return datetime
+}
+
+fun dateFromUTC(date: Date): Date {
+    return Date(date.time + Calendar.getInstance().timeZone.getOffset(date.time))
+}
+
+fun dateToUTC(date: Date): Date {
+    return Date(date.time - Calendar.getInstance().timeZone.getOffset(date.time))
 }
 
 

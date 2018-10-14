@@ -129,6 +129,7 @@ class MatchActivity : AppCompatActivity(),MatchDetailView {
                         FavoriteMatch.MATCH_ID to match.idEvent,
                         FavoriteMatch.MATCH_TYPE to type,
                         FavoriteMatch.MATCH_DATE to match.dateEvent,
+                        FavoriteMatch.MATCH_TIME to match.timeEvent,
                         FavoriteMatch.TEAM_AWAY_ID to match.idAwayTeam,
                         FavoriteMatch.TEAM_HOME_NAME to match.homeTeam,
                         FavoriteMatch.TEAM_AWAY_NAME to match.awayTeam,
