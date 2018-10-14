@@ -21,15 +21,6 @@ class MatchPresenter (private val view: MatchDetailView,
     fun getMatchDetail(eventId: String){
         serverIdlingResource.increment()
         view.showLoading()
-//        doAsync {
-//            val data = gson.fromJson(apiRepository.doRequest(TheSportDBApi.getScheduleDetail(eventId)),
-//                    ScheduleResponse::class.java)
-//
-//            uiThread {
-//                view.hideLoading()
-//                view.showMatchDetail(data.events)
-//            }
-//        }
 
         async(context.main){
             try {

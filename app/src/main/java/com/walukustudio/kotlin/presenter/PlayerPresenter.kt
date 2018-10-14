@@ -2,14 +2,11 @@ package com.walukustudio.kotlin.presenter
 
 import android.support.test.espresso.idling.CountingIdlingResource
 import com.google.gson.Gson
-import com.walukustudio.kotlin.model.LeagueResponse
 import com.walukustudio.kotlin.model.PlayerResponse
-import com.walukustudio.kotlin.model.TeamResponse
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
 import com.walukustudio.kotlin.utils.CoroutineContextProvider
 import com.walukustudio.kotlin.view.PlayersView
-import com.walukustudio.kotlin.view.TeamsView
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
 

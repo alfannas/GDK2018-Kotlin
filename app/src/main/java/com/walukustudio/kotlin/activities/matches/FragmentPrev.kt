@@ -49,6 +49,9 @@ class FragmentPrev : Fragment(), ScheduleView {
         swipeRefresh = view.find(R.id.swipeRefresh)
         spinner = view.find(R.id.spinner)
 
+        spinner.contentDescription = "last"
+        listTeam.contentDescription = "last"
+
         adapterSchedule = ScheduleAdapter(ctx,schedules, BuildConfig.PAST){
             schedule: Schedule ->  itemClick(schedule)
         }

@@ -1,5 +1,6 @@
 package com.walukustudio.kotlin.utils
 
+import android.annotation.SuppressLint
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
@@ -8,7 +9,6 @@ import android.view.View
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 fun View.visible() {
@@ -34,19 +34,20 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
     supportFragmentManager.inTransaction{replace(frameId, fragment)}
 }
 
+@SuppressLint("SimpleDateFormat")
 fun dateConvert(date:String?):String {
 
     val result = if (date != null) {
-        val locale = Locale("id")
 
-        val input = SimpleDateFormat("yyyy-MM-dd",locale)
-        val output = SimpleDateFormat("E, dd MMM yyyy", locale)
+        val input = SimpleDateFormat("yyyy-MM-dd")
+        val output = SimpleDateFormat("E, dd MMM yyyy")
 
         val indate: Date = input.parse(date)
         output.format(indate)
     }else{
         "undefined"
     }
+
     return result
 }
 
@@ -61,6 +62,7 @@ fun timeConvert(time:String):String{
 
 fun getNormalizedTime(time:String?):String{
     val result:String
+
     if (time != null) {
         val t : List<String> = time.split(":")
         result = t[0]+":"+t[1]
@@ -70,16 +72,12 @@ fun getNormalizedTime(time:String?):String{
     return result
 }
 
+@SuppressLint("SimpleDateFormat")
 fun stringToDate(date: String?,time:String): Date {
-    val pattern:String
-
-    if(time != "null"){
-        pattern = "yyyy-MM-dd HH:mm"
-    }else{
-        pattern = "yyyy-MM-dd"
-    }
+    val pattern:String = if(time != "null") "yyyy-MM-dd HH:mm" else "yyyy-MM-dd"
 
     val dateTime = "$date $time"
+
     val timeFormat = SimpleDateFormat(pattern)
     var myDate = Date()
     try {

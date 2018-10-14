@@ -25,7 +25,7 @@ class ScheduleUI<T> : AnkoComponent<T> {
                     id = R.id.spinner
                 }
 
-                swipeRefreshLayout() {
+                swipeRefreshLayout {
                     id = R.id.swipeRefresh
                     setColorSchemeResources(R.color.colorAccent,
                             android.R.color.holo_orange_light,

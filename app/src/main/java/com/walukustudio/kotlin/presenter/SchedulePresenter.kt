@@ -24,22 +24,6 @@ class SchedulePresenter (
     fun getScheduleList(id: String?,type:String?) {
         serverIdlingResource.increment()
         view.showLoading()
-//        doAsync {
-//            val data = when (type){
-//                BuildConfig.PAST -> gson.fromJson(apiRepository.doRequest(TheSportDBApi.getPastSchedule(id)),
-//                        ScheduleResponse::class.java)
-//                BuildConfig.NEXT -> gson.fromJson(apiRepository.doRequest(TheSportDBApi.getNextSchedule(id)),
-//                        ScheduleResponse::class.java)
-//                else -> gson.fromJson(apiRepository.doRequest(TheSportDBApi.getPastSchedule(id)),
-//                        ScheduleResponse::class.java)
-//            }
-//
-//            uiThread {
-//                view.hideLoading()
-//                //Log.d("SchedulePresenter",data.events[0].homeTeam)
-//                view.showScheduleList(data.events)
-//            }
-//        }
 
         async(context.main){
             try {

@@ -2,17 +2,17 @@ package com.walukustudio.kotlin.presenter
 
 import com.google.gson.Gson
 import com.walukustudio.kotlin.TestContextProvider
-import com.walukustudio.kotlin.model.Schedule
-import com.walukustudio.kotlin.model.ScheduleResponse
+import com.walukustudio.kotlin.model.Player
+import com.walukustudio.kotlin.model.PlayerResponse
 import com.walukustudio.kotlin.network.ApiRepository
 import com.walukustudio.kotlin.network.TheSportDBApi
-import com.walukustudio.kotlin.view.MatchDetailView
-import org.junit.Test
-
+import com.walukustudio.kotlin.view.PlayersView
 import org.junit.Before
+
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
@@ -20,11 +20,11 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest= Config.NONE)
-class MatchPresenterTest {
+class PlayerPresenterTest {
 
     @Mock
     private
-    lateinit var view: MatchDetailView
+    lateinit var view: PlayersView
 
     @Mock
     private
@@ -34,27 +34,27 @@ class MatchPresenterTest {
     private
     lateinit var apiRepository: ApiRepository
 
-    private lateinit var presenter: MatchPresenter
+    private lateinit var presenter: PlayerPresenter
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = MatchPresenter(view,apiRepository,gson, TestContextProvider())
+        presenter = PlayerPresenter(view,apiRepository,gson, TestContextProvider())
     }
 
     @Test
-    fun getMatchDetail() {
-        val match: MutableList<Schedule> = mutableListOf()
-        val response = ScheduleResponse(match)
-        val eventId = "441613"
+    fun getPlayerList() {
+        val player: MutableList<Player> = mutableListOf()
+        val response = PlayerResponse(player)
+        val teamId = "133604"
 
-        `when`(gson.fromJson(apiRepository.doRequest(TheSportDBApi.getScheduleDetail(eventId)),
-                ScheduleResponse::class.java)).thenReturn(response)
+        Mockito.`when`(gson.fromJson(apiRepository.doRequest(TheSportDBApi.getPlayers(teamId)),
+                PlayerResponse::class.java)).thenReturn(response)
 
-        presenter.getMatchDetail(eventId)
+        presenter.getPlayerList(teamId)
 
         verify(view).showLoading()
-        verify(view).showMatchDetail(match)
+        verify(view).showPlayerList(player)
         verify(view).hideLoading()
     }
 }

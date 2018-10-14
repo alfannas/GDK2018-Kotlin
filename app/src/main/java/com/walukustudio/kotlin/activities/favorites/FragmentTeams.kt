@@ -40,6 +40,8 @@ class FragmentTeams : Fragment() {
         progressBar = view.find(R.id.progressBar)
         swipeRefresh = view.find(R.id.swipeRefresh)
 
+        listEvent.contentDescription = "team"
+
         return view
     }
 
